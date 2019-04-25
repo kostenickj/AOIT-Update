@@ -64,3 +64,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /OIT_DX11/bin/x64/v140
+**/Debug
+**/Bin
+**/.vs

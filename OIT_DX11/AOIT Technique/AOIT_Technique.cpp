@@ -244,6 +244,11 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
 	CPUT_SHADER_MACRO AOITHDRMacro = { "dohdr", "1"};
 	CPUT_SHADER_MACRO nullMacro = { NULL, NULL };
 
+	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
+	flags |= D3DCOMPILE_DEBUG;
+	flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+	flags |= D3DCOMPILE_OPTIMIZATION_LEVEL0;
+
     cString ExecutableDirectory;
     CPUTFileSystem::GetExecutableDirectory(&ExecutableDirectory);
 
@@ -265,7 +270,7 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
 
         {
 		    hr = D3DCompileFromFile(shaderpath.c_str(), (D3D_SHADER_MACRO*)pFinalShaderMacros, D3D_COMPILE_STANDARD_FILE_INCLUDE,  "AOITSPResolvePS", "ps_5_0", 
-			    NULL, NULL, &pShaderBlob, &pErrorBlob);
+				flags, NULL, &pShaderBlob, &pErrorBlob);
 		    if(!SUCCEEDED(hr)) 
 		    {
 			    cString msg = s2ws((char*)pErrorBlob->GetBufferPointer());
@@ -281,7 +286,7 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
         }
 
         {
-            hr = D3DCompileFromFile(shaderpath.c_str(), (D3D_SHADER_MACRO*)pFinalShaderMacros, D3D_COMPILE_STANDARD_FILE_INCLUDE,  "AOITSPClearPS", "ps_5_0",                 NULL, NULL, &pShaderBlob, &pErrorBlob);
+            hr = D3DCompileFromFile(shaderpath.c_str(), (D3D_SHADER_MACRO*)pFinalShaderMacros, D3D_COMPILE_STANDARD_FILE_INCLUDE,  "AOITSPClearPS", "ps_5_0", flags, NULL, &pShaderBlob, &pErrorBlob);
             if(!SUCCEEDED(hr)) 
             {
                 cString msg = s2ws((char*)pErrorBlob->GetBufferPointer());
@@ -299,7 +304,7 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
 	shaderpath += POST_PROCESS_DXHLSL;
 
 	hr = D3DCompileFromFile(shaderpath.c_str(), NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "AOITResolvePS", "ps_5_0", 
-		NULL, NULL, &pShaderBlob, &pErrorBlob);
+		flags, NULL, &pShaderBlob, &pErrorBlob);
 	if(!SUCCEEDED(hr)) 
 	{
 		cString msg = s2ws((char*)pErrorBlob->GetBufferPointer());
@@ -320,7 +325,7 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
 	cString quadshaderpath(ExecutableDirectory);
 	quadshaderpath += FULL_SCREEN_QUAD;
 
-	hr = D3DCompileFromFile( quadshaderpath.c_str(), NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSMain", "vs_4_0", NULL, NULL, &pBlob, NULL);
+	hr = D3DCompileFromFile( quadshaderpath.c_str(), NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VSMain", "vs_4_0", flags, NULL, &pBlob, NULL);
     hr = pD3DDevice->CreateVertexShader( pBlob->GetBufferPointer(), pBlob->GetBufferSize(),
                                         NULL, &m_pFullScreenQuadVS );
 

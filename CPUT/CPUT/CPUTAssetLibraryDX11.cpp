@@ -443,11 +443,10 @@ CPUTResult CPUTAssetLibraryDX11::CompileShaderFromFile(
         memcpy( pFinalShaderMacros, pShaderMacros, macroCount*sizeof(D3D_SHADER_MACRO));
         memcpy( &pFinalShaderMacros[macroCount], pAdditionalMacros, sizeof(pAdditionalMacros));
 
-#ifndef DEBUG
-		UINT Flags1 = 0;
-#else
-		UINT Flags1 = D3DCOMPILE_DEBUG| D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
+		UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
+		flags |= D3DCOMPILE_DEBUG;
+		flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+		flags |= D3DCOMPILE_OPTIMIZATION_LEVEL0;
 
 
         ID3DBlob *pErrorBlob = NULL;
@@ -457,7 +456,7 @@ CPUTResult CPUTAssetLibraryDX11::CompileShaderFromFile(
             D3D_COMPILE_STANDARD_FILE_INCLUDE, // includes
             pShaderMainAsChar,
             pShaderProfileAsChar,
-			Flags1,                    // flags 1
+			flags,                    // flags 1
             0,                    // flags 2
             ppBlob,
             &pErrorBlob
