@@ -244,8 +244,8 @@ HRESULT AOITTechnique::OnCreate(ID3D11Device* pD3DDevice, int width, int height,
 	CPUT_SHADER_MACRO AOITHDRMacro = { "dohdr", "1"};
 	CPUT_SHADER_MACRO nullMacro = { NULL, NULL };
 
-	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
-	flags |= D3DCOMPILE_DEBUG;
+
+	UINT flags = D3DCOMPILE_DEBUG;
 	flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
 	flags |= D3DCOMPILE_OPTIMIZATION_LEVEL0;
 
